@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_wifi_car"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.skylar.wificar.WifiCar">
+
+
+    <Button
+        android:id="@+id/forward"
+        android:layout_width="66dp"
+        android:layout_height="55dp"
+        android:layout_x="70dp"
+        android:layout_y="200dp"
+        android:text="前进" />
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/turnleft"
+            android:layout_width="66dp"
+            android:layout_height="55dp"
+            android:layout_x="0dp"
+            android:layout_y="260dp"
+            android:text="左转" />
+
+        <Button
+            android:id="@+id/turnright"
+            android:layout_width="66dp"
+            android:layout_height="55dp"
+            android:layout_x="140dp"
+            android:layout_y="260dp"
+            android:text="右转" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/backward"
+        android:layout_width="66dp"
+        android:layout_height="55dp"
+        android:layout_x="70dp"
+        android:layout_y="260dp"
+        android:text="后退" />
+
+</LinearLayout>
+
