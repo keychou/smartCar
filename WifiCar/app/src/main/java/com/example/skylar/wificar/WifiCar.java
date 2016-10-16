@@ -35,16 +35,17 @@ public class WifiCar extends AppCompatActivity{
         {
             public boolean onTouch(View v, MotionEvent event) {
                 int action = event.getAction();
+
                 switch(action)
                 {
                     case MotionEvent.ACTION_DOWN:
                         System.out.println("klein------forward---ACTION_DOWN-----");
-                        mPrintWriterClient.print("a");
+                        mPrintWriterClient.print("W");
                         mPrintWriterClient.flush();
                         break;
                     case MotionEvent.ACTION_UP:
                         System.out.println("klein------forward---ACTION_UP-----");
-                        mPrintWriterClient.print("e");
+                        mPrintWriterClient.print("P");
                         mPrintWriterClient.flush();
                 }
                 return false;
@@ -55,17 +56,18 @@ public class WifiCar extends AppCompatActivity{
         backward.setOnTouchListener(new View.OnTouchListener()
         {
             public boolean onTouch(View v, MotionEvent event) {
+
                 int action = event.getAction();
                 switch(action)
                 {
                     case MotionEvent.ACTION_DOWN:
-                        System.out.println("klein------backward---ACTION_UP-----");
-                        mPrintWriterClient.print("b");
+                        System.out.println("klein------backward---ACTION_DOWN-----");
+                        mPrintWriterClient.print("S");
                         mPrintWriterClient.flush();
                         break;
                     case MotionEvent.ACTION_UP:
                         System.out.println("klein------backward---ACTION_UP-----");
-                        mPrintWriterClient.print("e");
+                        mPrintWriterClient.print("P");
                         mPrintWriterClient.flush();
                 }
                 return false;
@@ -81,12 +83,12 @@ public class WifiCar extends AppCompatActivity{
                 {
                     case MotionEvent.ACTION_DOWN:
                         System.out.println("klein------turnleft---ACTION_UP-----");
-                        mPrintWriterClient.print("d");
+                        mPrintWriterClient.print("A");
                         mPrintWriterClient.flush();
                         break;
                     case MotionEvent.ACTION_UP:
                         System.out.println("klein------turnleft---ACTION_UP-----");
-                        mPrintWriterClient.print("e");
+                        mPrintWriterClient.print("P");
                         mPrintWriterClient.flush();
                 }
                 return false;
@@ -102,12 +104,12 @@ public class WifiCar extends AppCompatActivity{
                 {
                     case MotionEvent.ACTION_DOWN:
                         System.out.println("klein------turnright---ACTION_UP-----");
-                        mPrintWriterClient.print("c");
+                        mPrintWriterClient.print("D");
                         mPrintWriterClient.flush();
                         break;
                     case MotionEvent.ACTION_UP:
                         System.out.println("klein------turnright---ACTION_UP-----");
-                        mPrintWriterClient.print("e");
+                        mPrintWriterClient.print("P");
                         mPrintWriterClient.flush();
                 }
                 return false;
@@ -127,12 +129,17 @@ public class WifiCar extends AppCompatActivity{
             String sPort = msgText.substring(start+1);
             int port = Integer.parseInt(sPort);
 
+
             try{
                 //连接服务器
+                System.out.println("klein---connecting----");
                 mSocketClient = new Socket(sIP, port);	//portnum
+                System.out.println("klein---connected----");
                 //取得输入、输出流
                 mBufferedReaderClient = new BufferedReader(new InputStreamReader(mSocketClient.getInputStream()));
                 mPrintWriterClient = new PrintWriter(mSocketClient.getOutputStream(), true);
+
+                System.out.println("klein------------mPrintWriterClient = " + mPrintWriterClient);
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -141,7 +148,4 @@ public class WifiCar extends AppCompatActivity{
         }
 
     };
-
-
-
 }
