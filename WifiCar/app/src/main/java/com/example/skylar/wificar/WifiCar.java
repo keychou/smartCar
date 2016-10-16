@@ -13,11 +13,14 @@ import java.net.Socket;
 
 public class WifiCar extends AppCompatActivity{
 
-    Button forward, backward, turnleft, turnright;
+    Button forward, backward, turnleft, turnright, acc, dec, light_on, light_off;
     static PrintWriter mPrintWriterClient = null;
     private Socket mSocketClient = null;
     static BufferedReader mBufferedReaderClient	= null;
     private Thread mThreadClient = null;
+
+    public static String CameraIp;
+    CameraSurfaceView r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,17 @@ public class WifiCar extends AppCompatActivity{
         backward = (Button) findViewById(R.id.backward);
         turnleft = (Button) findViewById(R.id.turnleft);
         turnright = (Button) findViewById(R.id.turnright);
+        acc = (Button) findViewById(R.id.acc);
+        dec = (Button) findViewById(R.id.dec);
+        light_on = (Button) findViewById(R.id.light_on);
+        light_off = (Button) findViewById(R.id.light_off);
+
+        r=(CameraSurfaceView)findViewById(R.id.mySurfaceView1);
+
+        CameraIp ="http://192.168.1.1:8080/?action=snapshot";
+
+        r.GetCameraIP(CameraIp);
+
 
         mThreadClient = new Thread(mRunnable);
         mThreadClient.start();
@@ -115,6 +129,42 @@ public class WifiCar extends AppCompatActivity{
                 return false;
             }
 
+        });
+
+        acc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("klein------acc---");
+                mPrintWriterClient.print("U");
+                mPrintWriterClient.flush();
+            }
+        });
+
+        dec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("klein------dec---");
+                mPrintWriterClient.print("N");
+                mPrintWriterClient.flush();
+            }
+        });
+
+        light_on.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("klein-----led on---");
+                mPrintWriterClient.print("1");
+                mPrintWriterClient.flush();
+            }
+        });
+
+        light_off.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("klein------led off---");
+                mPrintWriterClient.print("0");
+                mPrintWriterClient.flush();
+            }
         });
     }
 

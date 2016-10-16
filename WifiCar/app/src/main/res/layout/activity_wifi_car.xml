@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_wifi_car"
     android:orientation="vertical"
@@ -7,13 +7,17 @@
     android:layout_height="match_parent"
     tools:context="com.example.skylar.wificar.WifiCar">
 
+    <com.example.skylar.wificar.CameraSurfaceView
+        android:id="@+id/mySurfaceView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
     <Button
         android:id="@+id/forward"
         android:layout_width="66dp"
         android:layout_height="55dp"
-        android:layout_x="70dp"
-        android:layout_y="200dp"
+        android:layout_x="79dp"
+        android:layout_y="389dp"
         android:text="前进" />
 
 
@@ -21,21 +25,6 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/turnleft"
-            android:layout_width="66dp"
-            android:layout_height="55dp"
-            android:layout_x="0dp"
-            android:layout_y="260dp"
-            android:text="左转" />
-
-        <Button
-            android:id="@+id/turnright"
-            android:layout_width="66dp"
-            android:layout_height="55dp"
-            android:layout_x="140dp"
-            android:layout_y="260dp"
-            android:text="右转" />
 
     </LinearLayout>
 
@@ -43,9 +32,57 @@
         android:id="@+id/backward"
         android:layout_width="66dp"
         android:layout_height="55dp"
-        android:layout_x="70dp"
-        android:layout_y="260dp"
+        android:layout_x="80dp"
+        android:layout_y="451dp"
         android:text="后退" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/turnleft"
+        android:layout_width="66dp"
+        android:layout_height="55dp"
+        android:layout_x="7dp"
+        android:layout_y="451dp"
+        android:text="左转" />
+
+    <Button
+        android:id="@+id/turnright"
+        android:layout_width="66dp"
+        android:layout_height="55dp"
+        android:layout_x="152dp"
+        android:layout_y="449dp"
+        android:text="右转" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="acc"
+        android:id="@+id/acc"
+        android:layout_x="268dp"
+        android:layout_y="394dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dec"
+        android:id="@+id/dec"
+        android:layout_x="268dp"
+        android:layout_y="453dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="light on"
+        android:id="@+id/light_on"
+        android:layout_x="24dp"
+        android:layout_y="11dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="light off"
+        android:id="@+id/light_off"
+        android:layout_x="135dp"
+        android:layout_y="11dp" />
+
+</AbsoluteLayout>
 

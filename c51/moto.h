@@ -1,3 +1,5 @@
+#ifndef __MOTO_H_
+#define __MOTO_H_
 #include "stc15f2k60s2.h"
 
 
@@ -17,3 +19,8 @@ sbit MOTOD2 = P1^3;
 
 void moto_side1(char direction, int speed);
 void moto_side2(char direction, int speed);
+void set_speed_up(int speed);
+void set_speed_down(int speed);
+
+
+#endif

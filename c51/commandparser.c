@@ -47,6 +47,16 @@ void commandparser(unsigned char cmd)
           moto_side2(0, 0);
    		  break;
 
+	   case 'U':
+	      send_string_by_uart1("car acc\r\n");
+          set_speed_up(0);
+   		  break;
+
+	   case 'N':
+	      send_string_by_uart1("car dec\r\n");
+	      set_speed_down(0);
+   		  break;
+
 	   // led control
 	   case '0':
 	      send_string_by_uart1("turn on led off\r\n");
