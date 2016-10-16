@@ -2,6 +2,7 @@
 #include "moto.h"
 #include "pwm.h"
 #include "serial.h"
+#include "rgbled.h"
 
 //#define UP 0x57     // W
 //#define DOWN 0x53   // S
@@ -44,6 +45,44 @@ void commandparser(unsigned char cmd)
 	      send_string_by_uart1("car STOP\r\n");
 	      moto_side1(0, 0);
           moto_side2(0, 0);
+   		  break;
+
+	   // led control
+	   case '0':
+	      send_string_by_uart1("turn on led off\r\n");
+	      led_none();
+   		  break;
+	   case '1':
+	      send_string_by_uart1("turn on led white\r\n");
+	      led_white();
+   		  break;
+	   case '2':
+	      send_string_by_uart1("turn on led red\r\n");
+	      led_red();
+   		  break;
+	   case '3':
+	      send_string_by_uart1("turn on led green\r\n");
+	      led_green();
+   		  break;
+	   case '4':
+	      send_string_by_uart1("turn on led blue\r\n");
+	      led_blue();
+   		  break;
+	   case '5':
+	      send_string_by_uart1("turn on led red green\r\n");
+	      led_red_green();
+   		  break;
+	   case '6':
+	      send_string_by_uart1("turn on led red blue\r\n");
+	      led_red_blue();
+   		  break;
+	   case '7':
+	      send_string_by_uart1("turn on led green blue\r\n");
+	      led_green_blue();
+   		  break;
+	   case '8':
+	      send_string_by_uart1("turn on led flowing water light\r\n");
+	      flowing_water_light();
    		  break;
 	   default:
 	      send_string_by_uart1("cmd not found\r\n");

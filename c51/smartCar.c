@@ -3,12 +3,14 @@
 #include "moto.h"
 #include "pwm.h"
 #include "commandparser.h"
+#include "rgbled.h"
 
 #define S2RI 0x01
 #define S2TI 0x02
 
 void main()
 {
+    led_green_blue();
     uart1_init();
 	uart2_init();
 	pwm_config();
