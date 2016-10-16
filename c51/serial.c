@@ -47,10 +47,10 @@ void send_string_by_uart1(char *s)
 */
 void uart1() interrupt 4 using 1
 {
-	if(RI)
-	{
-		RI=0;
-	}
+//	if(RI)
+//	{
+//		RI=0;
+//	}
 	if(TI)
 	{
 		TI=0;  		
