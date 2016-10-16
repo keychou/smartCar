@@ -2,9 +2,9 @@
 #include "intrins.h"
 #include "common.h"
 
-void SendDataByUart1(BYTE dat);
-void SendStringByUart1(char *s);
+void send_data_by_uart1(uchar dat);
+void send_string_by_uart1(char *s);
 void uart1_init();
-void Uart2_Init(void);
-void SendDataByUart2(BYTE dat);
-void SendStringByUart2(char *s);
+void uart2_init(void);
+void send_data_by_uart2(uchar dat);
+void send_string_by_uart2(char *s);

@@ -10,7 +10,6 @@
 #include "pwm.h"
 
 bit busy;
-//BYTE temp;
 
 #define FOSC 11059200L		//晶振频率 特别提示：检查开发板的晶振频率是否和设定的频率一致
 #define BAUD 9600			// 波特率
@@ -24,7 +23,7 @@ bit busy;
 /*
 *  串口1： 发送单个字节
 */
-void SendDataByUart1(BYTE dat)
+void send_data_by_uart1(uchar dat)
 {
 	while(busy);
 	ACC=dat;
@@ -35,18 +34,18 @@ void SendDataByUart1(BYTE dat)
 /*
 * 串口1： 发送字符串
 */
-void SendStringByUart1(char *s)
+void send_string_by_uart1(char *s)
 {
 	while(*s)
 	{
-		SendDataByUart1(*s++);
+		send_data_by_uart1(*s++);
 	}
 }
 
 /*
   串口1： 中断服务程序
 */
-void Uart1() interrupt 4 using 1
+void uart1() interrupt 4 using 1
 {
 	if(RI)
 	{
@@ -77,7 +76,7 @@ void uart1_init()
 
 
 
-void Uart2_Init(void)
+void uart2_init(void)
 {
 	S2CON=0x50;
 	T2L = TM; //设置波特率重装值
@@ -87,7 +86,7 @@ void Uart2_Init(void)
 	EA=1;
 }
 
-void Uart2() interrupt 8 using 1
+void uart2() interrupt 8 using 1
 {
 //	if(S2CON & S2RI)
 //	{
@@ -104,7 +103,7 @@ void Uart2() interrupt 8 using 1
 		busy=0;
 	}
 }
-void SendDataByUart2(BYTE dat)
+void send_data_by_uart2(uchar dat)
 {
 	while(busy);
 	ACC=dat;
@@ -112,11 +111,11 @@ void SendDataByUart2(BYTE dat)
 	S2BUF=ACC;
 }
 
-void SendStringByUart2(char *s)
+void send_string_by_uart2(char *s)
 {
 	while(*s)
 	{
-		SendDataByUart2(*s++);
+		send_data_by_uart2(*s++);
 	}
 }
 
