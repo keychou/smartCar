@@ -14,6 +14,7 @@ void main()
     uart1_init();
 	uart2_init();
 	pwm_config();
+	Time0_Init_1();
 	while(1)
 	{	
 	   //串口1，PC串口工具控制模式
@@ -28,7 +29,7 @@ void main()
 
 
 	   //串口2，手机app控制模式
-  	   if(S2CON & S2RI)
+       if(S2CON & S2RI)
 	   {
 	     uchar temp;
 		 S2CON &= ~S2RI;

@@ -3,6 +3,7 @@
 #include "pwm.h"
 #include "serial.h"
 #include "rgbled.h"
+#include "servo.h"
 
 //#define UP 0x57     // W
 //#define DOWN 0x53   // S
@@ -55,6 +56,26 @@ void commandparser(unsigned char cmd)
 	   case 'N':
 	      send_string_by_uart1("car dec\r\n");
 	      set_speed_down(0);
+   		  break;
+
+	   case 'H':
+	      send_string_by_uart1("servo h increase\r\n");
+	      servo_h_increase();
+   		  break;
+
+	   case 'J':
+	      send_string_by_uart1("servo h decrease\r\n");
+	      servo_h_decrease();
+   		  break;
+
+	   case 'V':
+	      send_string_by_uart1("servo v increase\r\n");
+	      servo_v_increase();
+   		  break;
+	   
+	   case 'B':
+	      send_string_by_uart1("servo v decrease\r\n");
+	      servo_v_decrease();
    		  break;
 
 	   // led control
