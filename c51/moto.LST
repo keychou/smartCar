@@ -1,0 +1,129 @@
+C51 COMPILER V9.00   MOTO                                                                  03/07/2018 21:33:05 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MOTO
+OBJECT MODULE PLACED IN moto.OBJ
+COMPILER INVOKED BY: C:\Program Files\C51\BIN\C51.EXE moto.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "moto.h"
+   2          #include "pwm.h"
+   3          #include "serial.h"
+   4          
+   5          #define INIT_SPEED 2000
+   6          int global_speed = INIT_SPEED;
+   7          /*
+   8            ena：启动，停止
+   9            direction: 车轮转向
+  10            speed: 速度
+  11          */
+  12          //moto_A and moto_C
+  13          void moto_side1(char direction, int speed)
+  14          {
+  15   1          if (speed != 0)
+  16   1              {
+  17   2                 speed = global_speed;
+  18   2              }
+  19   1      
+  20   1              if (speed > CYCLE)
+  21   1              {
+  22   2                 speed = CYCLE;
+  23   2              }
+  24   1          
+  25   1              if (UP == direction)
+  26   1              {  
+  27   2                      MOTOA1 = 0;
+  28   2                      MOTOA2 = 1;
+  29   2                      MOTOC1 = 0;
+  30   2                      MOTOC2 = 1; 
+  31   2                      PWM3_setPwmWidth(speed);
+  32   2                      PWM4_setPwmWidth(speed);
+  33   2      
+  34   2                          
+  35   2              }else if (DOWN == direction)
+  36   1              {
+  37   2                      MOTOA1 = 1;
+  38   2                      MOTOA2 = 0;
+  39   2                      MOTOC1 = 1;
+  40   2                      MOTOC2 = 0; 
+  41   2                      PWM3_setPwmWidth(speed);
+  42   2                      PWM4_setPwmWidth(speed);        
+  43   2              }  
+  44   1      }
+  45          
+  46          //moto_B and moto_D
+  47          void moto_side2(char direction, int speed)
+  48          {
+  49   1          if (speed != 0)
+  50   1              {
+  51   2                 speed = global_speed;
+  52   2              }
+  53   1              
+  54   1              if (speed > CYCLE)
+  55   1              {
+C51 COMPILER V9.00   MOTO                                                                  03/07/2018 21:33:05 PAGE 2   
+
+  56   2                 speed = CYCLE;
+  57   2              }
+  58   1          
+  59   1              if (UP == direction)
+  60   1              {
+  61   2              MOTOB1 = 0;
+  62   2                      MOTOB2 = 1;
+  63   2                      MOTOD1 = 0;
+  64   2                      MOTOD2 = 1; 
+  65   2                      PWM6_setPwmWidth(speed);
+  66   2                      PWM7_setPwmWidth(speed);
+  67   2                          
+  68   2              }else if (DOWN == direction)
+  69   1              {               
+  70   2              MOTOB1 = 1;
+  71   2                      MOTOB2 = 0;
+  72   2                      MOTOD1 = 1;
+  73   2                      MOTOD2 = 0; 
+  74   2                      PWM6_setPwmWidth(speed);
+  75   2                      PWM7_setPwmWidth(speed);
+  76   2              }
+  77   1      }
+  78          
+  79          
+  80          void set_speed_up(int speed){
+  81   1          send_string_by_uart1("speed up\r\n");
+  82   1          if (global_speed < (CYCLE - 500))
+  83   1              {
+  84   2                 global_speed =  global_speed + 500;
+  85   2              } 
+  86   1              else if ((CYCLE - 500) < global_speed)
+  87   1              {
+  88   2                      global_speed =  CYCLE;
+  89   2              }
+  90   1      }
+*** WARNING C280 IN LINE 80 OF MOTO.C: 'speed': unreferenced local variable
+  91          
+  92          void set_speed_down(int speed){
+  93   1          send_string_by_uart1("speed down\r\n");
+  94   1          if (global_speed >= 500)
+  95   1              {
+  96   2                 global_speed =  global_speed - 500;
+  97   2              } 
+  98   1              else if (global_speed < 500)
+  99   1              {
+ 100   2                      global_speed =  0;
+ 101   2              }
+ 102   1      }
+*** WARNING C280 IN LINE 92 OF MOTO.C: 'speed': unreferenced local variable
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    279    ----
+   CONSTANT SIZE    =     24    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

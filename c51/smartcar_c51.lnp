@@ -1,0 +1,13 @@
+"STARTUP.obj",
+"commandparser.obj",
+"common.obj",
+"delay.obj",
+"lcd1602.obj",
+"moto.obj",
+"pwm.obj",
+"rgbLed.obj",
+"serial.obj",
+"servo.obj",
+"smartCar.obj" 
+TO "smartcar_c51" 
+RAMSIZE(256) 

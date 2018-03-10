@@ -1,0 +1,93 @@
+C51 COMPILER V9.00   LCD1602                                                               03/07/2018 21:33:05 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN lcd1602.OBJ
+COMPILER INVOKED BY: C:\Program Files\C51\BIN\C51.EXE lcd1602.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /**********************
+   2          作者：Jellina电子
+   3          说明：进行LCD1602测试的例程
+   4          ***********************/
+   5          
+   6          /**********************
+   7          基于STC15F2K60S2系列单片机C语言编程实现
+   8          使用如下头文件，不用另外再包含"REG51.H"
+   9          #include <STC15F2K60S2.h>
+  10          ***********************/
+  11          //#include "reg51.h"
+  12          //sfr P4   = 0xC0;
+  13          #include <STC15F2K60S2.h>
+  14          #include "lcd1602.h"
+*** WARNING C258 IN LINE 16 OF LCD1602.H: 'table': mspace on parameter ignored
+  15          #include "delay.h"
+  16          
+  17          void lcd_wcom(uchar com)  //1602写命令函数                 
+  18          { 
+  19   1          rs=0;            //选择指令寄存器 
+  20   1          rw=0;            //选择写 
+  21   1          P2=com;            //把命令字送入P2 
+  22   1          delay(5);            //延时一小会儿，让1602准备接收数据 
+  23   1          en=1;           //使能线电平变化，命令送入1602的8位数据口 
+  24   1          en=0; 
+  25   1      } 
+  26          void lcd_wdat(uchar dat)        //1602写数据函数       
+  27          { 
+  28   1          rs=1;        //选择数据寄存器 
+  29   1          rw=0;        //选择写 
+  30   1          P2=dat;        //把要显示的数据送入P2 
+  31   1          delay(5);        //延时一小会儿，让1602准备接收数据 
+  32   1          en=1;        //使能线电平变化，数据送入1602的8位数据口 
+  33   1          en=0; 
+  34   1      } 
+  35          void lcd_init()              //1602初始化函数       
+  36          { 
+  37   1          lcd_wcom(0x38);       //8位数据，双列，5*7字形       
+  38   1          lcd_wcom(0x0c);      //开启显示屏，关光标，光标不闪烁 
+  39   1          lcd_wcom(0x06);    //显示地址递增，即写一个数据后，显示位置右移一位 
+  40   1          lcd_wcom(0x01);    //清屏 
+  41   1      } 
+  42          
+  43          void print_to_screen(uchar code table[])
+*** WARNING C258 IN LINE 43 OF LCD1602.C: 'table': mspace on parameter ignored
+  44          {     
+  45   1          uchar n,m=0; 
+  46   1      
+  47   1              lcdsel = 1;
+  48   1          lcd_init();                 //液晶初始化 
+  49   1          lcd_wcom(0x80);   //显示地址设为80H（即00H，）上排第一位       
+  50   1          for(m=0;m<17;m++)     //将table[]中的数据依次写入1602显示 
+  51   1          { 
+  52   2                  lcd_wdat(table[m]);           
+  53   2                  delay(200); 
+C51 COMPILER V9.00   LCD1602                                                               03/07/2018 21:33:05 PAGE 2   
+
+  54   2          } 
+  55   1      //    lcd_wcom(0x80+0x44); //重新设定显示地址为0xc4,即下排第5位 
+  56   1      //    for(n=0;n<11;n++)   //将table1[]中的数据依次写入1602显示 
+  57   1      //    {     
+  58   1      //           lcd_wdat(table1[n]); 
+  59   1      //           delay(200); 
+  60   1      //    } 
+  61   1          while(1);        //动态停机 
+  62   1      } 
+*** WARNING C280 IN LINE 45 OF LCD1602.C: 'n': unreferenced local variable
+  63          
+  64          
+  65          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    115    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  3 WARNING(S),  0 ERROR(S)

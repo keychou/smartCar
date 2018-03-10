@@ -1,0 +1,180 @@
+C51 COMPILER V9.00   SERVO                                                                 03/07/2018 21:33:05 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE SERVO
+OBJECT MODULE PLACED IN servo.OBJ
+COMPILER INVOKED BY: C:\Program Files\C51\BIN\C51.EXE servo.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "servo.h"
+   2          #include "serial.h"
+   3          #include "delay.h"
+   4          #include "commandparser.h"
+   5          #include "moto.h"
+   6          #include "pwm.h"
+   7          
+   8          
+   9          #define FOSC 11059200L
+  10          #define T1MS (65536-(FOSC)/1000/10)
+  11          
+  12          #define MAX_POSITION_H  25
+  13          #define MAX_POSITION_V  10
+  14          #define MIN_POSITION  5
+  15          
+  16          
+  17          sbit PWM_SERVO_V =P5^4;          //PWM信号输出
+  18          sbit PWM_SERVO_H =P5^5;          //PWM信号输出
+  19          
+  20          
+  21          unsigned char count_p = 0;
+  22          unsigned char SEV_conut = 5;
+  23          unsigned char SEH_count = 15;
+  24          
+  25          unsigned char position_v = 5;
+  26          unsigned char position_h = 15;
+  27          unsigned char resolution = 2;
+  28          
+  29          void tm0_isr() interrupt 1 using 1
+  30          {
+  31   1      
+  32   1      //    PWM_SERVO_H = !PWM_SERVO_H ;
+  33   1              if(count_p <= SEH_count) //控制占空比左右
+  34   1          {
+  35   2              //如果count的计数小于（5-25）也就是0.5ms-2.5ms则这段小t周期持续高电平。产生方波
+  36   2              PWM_SERVO_H = 1;
+  37   2          }
+  38   1          else
+  39   1          {
+  40   2              PWM_SERVO_H = 0;
+  41   2          }
+  42   1      
+  43   1      
+  44   1              if(count_p <= SEV_conut) //控制占空比左右
+  45   1          {
+  46   2              //如果count的计数小于（5-25）也就是0.5ms-2.5ms则这段小t周期持续高电平。产生方波
+  47   2              PWM_SERVO_V = 1;
+  48   2          }
+  49   1          else
+  50   1          {
+  51   2              PWM_SERVO_V = 0;
+  52   2          }
+  53   1      
+  54   1              count_p++;
+  55   1          if (count_p >= 200) //T = 20ms则定时器计数变量清0
+C51 COMPILER V9.00   SERVO                                                                 03/07/2018 21:33:05 PAGE 2   
+
+  56   1          {
+  57   2              count_p = 0;
+  58   2          }
+  59   1      }
+  60          
+  61          void Time0_Init()          //定时器初始化
+  62          {
+  63   1          AUXR |= 0x80;
+  64   1              TMOD = 0x00;
+  65   1              TL0 = T1MS;
+  66   1              TH0 = T1MS>>8;
+  67   1              TR0 = 1;
+  68   1              ET0 = 1;
+  69   1              EA = 1;
+  70   1      }
+  71          
+  72          
+  73          void Time0_Init_1()          //定时器初始化
+  74          {
+  75   1          AUXR |= 0x80;
+  76   1              INT_CLKO = 0X01;
+  77   1              TMOD &= 0xf0;
+  78   1              TL0 = T1MS;
+  79   1              TH0 = T1MS>>8;
+  80   1      
+  81   1              TR0 = 1;
+  82   1              ET0 = 1;
+  83   1              EA = 1;
+  84   1      }
+  85          
+  86          
+  87          void servo_h_increase(){
+  88   1          if (position_h <= (MAX_POSITION_H - resolution)){
+  89   2                 position_h += resolution;
+  90   2              } else {
+  91   2                 position_h = MAX_POSITION_H;
+  92   2              }
+  93   1              set_servo_h_position(position_h);
+  94   1      }
+  95          
+  96          void servo_h_decrease(){
+  97   1          if ((MIN_POSITION + resolution) <= position_h){
+  98   2                 position_h -= resolution;
+  99   2              } else {
+ 100   2                 position_h = MIN_POSITION;
+ 101   2              }
+ 102   1              set_servo_h_position(position_h);
+ 103   1      }
+ 104          
+ 105          void servo_v_increase(){
+ 106   1          if (position_v <= (MAX_POSITION_V - resolution)){
+ 107   2                 position_v += resolution;
+ 108   2              } else {
+ 109   2                 position_v = MAX_POSITION_V;
+ 110   2              }
+ 111   1              set_servo_v_position(position_v);
+ 112   1      }
+ 113          
+ 114          void servo_v_decrease(){
+ 115   1          if ((MIN_POSITION + resolution) <= position_v){
+ 116   2                 position_v -= resolution;
+ 117   2              } else {
+C51 COMPILER V9.00   SERVO                                                                 03/07/2018 21:33:05 PAGE 3   
+
+ 118   2                 position_v = MIN_POSITION;
+ 119   2              }
+ 120   1              set_servo_v_position(position_v);
+ 121   1      }
+ 122          
+ 123          void set_servo_h_position(int postion){
+ 124   1          send_string_by_uart1("set servo h position\r\n");
+ 125   1              if(MIN_POSITION < postion < MAX_POSITION_H){
+ 126   2                 SEH_count = postion;
+ 127   2              }
+ 128   1              else if (postion <= MIN_POSITION)
+ 129   1              {
+ 130   2                      SEH_count = MIN_POSITION;
+ 131   2              }
+ 132   1              else if (postion >= MAX_POSITION_H)
+ 133   1              {
+ 134   2                      SEH_count = MAX_POSITION_H;
+ 135   2              }
+ 136   1      
+ 137   1      }
+ 138          
+ 139          
+ 140          void set_servo_v_position(int postion){
+ 141   1          send_string_by_uart1("set servo v position\r\n");
+ 142   1          if(MIN_POSITION < postion < MAX_POSITION_V){
+ 143   2                 SEV_conut = postion;
+ 144   2              }
+ 145   1              else if (postion <= MIN_POSITION)
+ 146   1              {
+ 147   2                      SEV_conut = MIN_POSITION;
+ 148   2              }
+ 149   1              else if (postion >= MAX_POSITION_V)
+ 150   1              {
+ 151   2                      SEV_conut = MAX_POSITION_V;
+ 152   2              }
+ 153   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    384    ----
+   CONSTANT SIZE    =     46    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
