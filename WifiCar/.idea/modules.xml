@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SmartCarApp/app.iml" filepath="$PROJECT_DIR$/SmartCarApp/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SmartCarApp/SmartCarApp.iml" filepath="$PROJECT_DIR$/SmartCarApp/SmartCarApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/WifiCar.iml" filepath="$PROJECT_DIR$/WifiCar.iml" />
+      <module fileurl="file://D:\warmhole\smartCar\WifiCar\SmartCarApp\app.iml" filepath="D:\warmhole\smartCar\WifiCar\SmartCarApp\app.iml" />
     </modules>
   </component>
 </project>

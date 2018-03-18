@@ -7,11 +7,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.skylar.wificar.WifiCar">
 
-    <com.example.skylar.wificar.CameraSurfaceView
-        android:id="@+id/mySurfaceView1"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
-
     <Button
         android:id="@+id/forward"
         android:layout_width="66dp"

@@ -1,7 +1,10 @@
 package com.example.skylar.wificar;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -12,15 +15,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class WifiCar extends AppCompatActivity{
-
+     public static final String TAG = "WifiCar";
     Button forward, backward, turnleft, turnright, acc, dec, light_on, light_off;
-    static PrintWriter mPrintWriterClient = null;
-    private Socket mSocketClient = null;
-    static BufferedReader mBufferedReaderClient	= null;
-    private Thread mThreadClient = null;
 
-    public static String CameraIp;
-    CameraSurfaceView r;
+    Handler handler;
+    CommandSender commandSender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,32 +34,38 @@ public class WifiCar extends AppCompatActivity{
         light_on = (Button) findViewById(R.id.light_on);
         light_off = (Button) findViewById(R.id.light_off);
 
-        r=(CameraSurfaceView)findViewById(R.id.mySurfaceView1);
+        Log.i(TAG, "onCreate");
 
-        CameraIp ="http://192.168.1.1:8080/?action=snapshot";
+        commandSender = new CommandSender();
+        commandSender.start();
+        try{
+            Thread.sleep(1000);
+        }catch (Exception e){
 
-        r.GetCameraIP(CameraIp);
+        }
+        handler = commandSender.getHander();
+        Log.i(TAG, "handler = " + handler);
 
-
-        mThreadClient = new Thread(mRunnable);
-        mThreadClient.start();
 
         forward.setOnTouchListener(new View.OnTouchListener()
         {
             public boolean onTouch(View v, MotionEvent event) {
                 int action = event.getAction();
 
+
                 switch(action)
                 {
                     case MotionEvent.ACTION_DOWN:
-                        System.out.println("klein------forward---ACTION_DOWN-----");
-                        mPrintWriterClient.print("W");
-                        mPrintWriterClient.flush();
+                        Log.i(TAG, "klein------forward---ACTION_DOWN-----");
+                        Message msg = Message.obtain();
+                        msg.what = CommandInterface.INT_COMMAND_TURN_UP;
+                        handler.sendMessage(msg);
                         break;
                     case MotionEvent.ACTION_UP:
-                        System.out.println("klein------forward---ACTION_UP-----");
-                        mPrintWriterClient.print("P");
-                        mPrintWriterClient.flush();
+                        Log.i(TAG, "klein------forward---ACTION_UP-----");
+                        Message msg1 = Message.obtain();
+                        msg1.what = CommandInterface.INT_COMMAND_TURN_STOP;
+                        handler.sendMessage(msg1);
                 }
                 return false;
             }
@@ -70,19 +75,20 @@ public class WifiCar extends AppCompatActivity{
         backward.setOnTouchListener(new View.OnTouchListener()
         {
             public boolean onTouch(View v, MotionEvent event) {
-
                 int action = event.getAction();
                 switch(action)
                 {
                     case MotionEvent.ACTION_DOWN:
-                        System.out.println("klein------backward---ACTION_DOWN-----");
-                        mPrintWriterClient.print("S");
-                        mPrintWriterClient.flush();
+                        Log.i(TAG, "klein------backward---ACTION_DOWN-----");
+                        Message msg = Message.obtain();
+                        msg.what = CommandInterface.INT_COMMAND_TURN_DOWN;
+                        handler.sendMessage(msg);
                         break;
                     case MotionEvent.ACTION_UP:
-                        System.out.println("klein------backward---ACTION_UP-----");
-                        mPrintWriterClient.print("P");
-                        mPrintWriterClient.flush();
+                        Log.i(TAG, "klein------backward---ACTION_UP-----");
+                        Message msg1 = Message.obtain();
+                        msg1.what = CommandInterface.INT_COMMAND_TURN_STOP;
+                        handler.sendMessage(msg1);
                 }
                 return false;
             }
@@ -96,14 +102,17 @@ public class WifiCar extends AppCompatActivity{
                 switch(action)
                 {
                     case MotionEvent.ACTION_DOWN:
-                        System.out.println("klein------turnleft---ACTION_UP-----");
-                        mPrintWriterClient.print("A");
-                        mPrintWriterClient.flush();
+                        Log.i(TAG, "klein------turnleft---ACTION_UP-----");
+                        Message msg = Message.obtain();
+                        msg.what = CommandInterface.INT_COMMAND_TURN_LEFT;
+                        handler.sendMessage(msg);
+
                         break;
                     case MotionEvent.ACTION_UP:
-                        System.out.println("klein------turnleft---ACTION_UP-----");
-                        mPrintWriterClient.print("P");
-                        mPrintWriterClient.flush();
+                        Log.i(TAG, "klein------turnleft---ACTION_UP-----");
+                        Message msg1 = Message.obtain();
+                        msg1.what = CommandInterface.INT_COMMAND_TURN_STOP;
+                        handler.sendMessage(msg1);
                 }
                 return false;
             }
@@ -117,14 +126,16 @@ public class WifiCar extends AppCompatActivity{
                 switch(action)
                 {
                     case MotionEvent.ACTION_DOWN:
-                        System.out.println("klein------turnright---ACTION_UP-----");
-                        mPrintWriterClient.print("D");
-                        mPrintWriterClient.flush();
+                        Log.i(TAG, "klein------turnright---ACTION_UP-----");
+                        Message msg = Message.obtain();
+                        msg.what = CommandInterface.INT_COMMAND_TURN_RIGHT;
+                        handler.sendMessage(msg);
                         break;
                     case MotionEvent.ACTION_UP:
-                        System.out.println("klein------turnright---ACTION_UP-----");
-                        mPrintWriterClient.print("P");
-                        mPrintWriterClient.flush();
+                        Log.i(TAG, "klein------turnright---ACTION_UP-----");
+                        Message msg1 = Message.obtain();
+                        msg1.what = CommandInterface.INT_COMMAND_TURN_STOP;
+                        handler.sendMessage(msg1);
                 }
                 return false;
             }
@@ -134,68 +145,39 @@ public class WifiCar extends AppCompatActivity{
         acc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("klein------acc---");
-                mPrintWriterClient.print("U");
-                mPrintWriterClient.flush();
+                Log.i(TAG, "klein------acc---");
+                Message msg = Message.obtain();
+                msg.what = CommandInterface.INT_COMMAND_TURN_ACC;
+                handler.sendMessage(msg);
             }
         });
 
         dec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("klein------dec---");
-                mPrintWriterClient.print("N");
-                mPrintWriterClient.flush();
+                Log.i(TAG, "klein------dec---");
+                Message msg = Message.obtain();
+                msg.what = CommandInterface.INT_COMMAND_TURN_DEC;
+                handler.sendMessage(msg);
             }
         });
 
         light_on.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("klein-----led on---");
-                mPrintWriterClient.print("1");
-                mPrintWriterClient.flush();
+                Log.i(TAG, "klein-----led on---");
+
             }
         });
 
         light_off.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("klein------led off---");
-                mPrintWriterClient.print("0");
-                mPrintWriterClient.flush();
+                Log.i(TAG, "klein------led off---");
+
             }
         });
     }
 
-    private Runnable mRunnable	= new Runnable() {
-        public void run() {
 
-            String msgText ="192.168.1.1:2001";
-
-            int start = msgText.indexOf(":");
-
-            String sIP = msgText.substring(0, start);
-            String sPort = msgText.substring(start+1);
-            int port = Integer.parseInt(sPort);
-
-
-            try{
-                //连接服务器
-                System.out.println("klein---connecting----");
-                mSocketClient = new Socket(sIP, port);	//portnum
-                System.out.println("klein---connected----");
-                //取得输入、输出流
-                mBufferedReaderClient = new BufferedReader(new InputStreamReader(mSocketClient.getInputStream()));
-                mPrintWriterClient = new PrintWriter(mSocketClient.getOutputStream(), true);
-
-                System.out.println("klein------------mPrintWriterClient = " + mPrintWriterClient);
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
-
-    };
 }
